@@ -48,3 +48,10 @@
   padding-left: 9px;
   background-color: #0b98eb;
 }
+.profile-container .version-field {
+  font-size: 1rem;
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  opacity: 0.5;
+}

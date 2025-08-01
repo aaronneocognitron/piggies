@@ -89,6 +89,9 @@ export default function ProfilePage() {
             {t("disconnectWallet")}
           </Button>
         </div>
+        <span className="version-field">
+          v3.3.2-tst
+        </span>
       </div>
     </Page>
   );

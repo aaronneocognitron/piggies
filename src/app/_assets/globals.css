@@ -73,6 +73,7 @@ body {
   overflow: hidden;
 }
 .page-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
