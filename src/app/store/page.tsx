@@ -84,7 +84,7 @@ export default function StorePage() {
       });
 
       alert(
-          typeof response.data === 'string' ? response.data : 'upgraded_pig_level' in response.data.message ?
+          typeof response.data.message === 'string' ? response.data : 'upgraded_pig_level' in response.data.message ?
           t('storePage.purchaseCongratulations', { pig: pigsMap.find(pig => pig.code === response.data.message.upgraded_pig_level)?.title ?? 'PIG' }) :
               t('storePage.purchaseCongratulations', { pig: pigsMap.find(pig => pig.code === ((currentPigCode ?? 0) + 1))?.title ?? 'PIG' })
       );

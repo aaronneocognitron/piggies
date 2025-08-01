@@ -60,10 +60,10 @@ contract PigShop {
   // Initialize the owner in the init() function
   init(id: Int as uint64, owner: Address){
     self.owner = owner;
-    self.limits.set(1, ton("0.1"));
-    self.limits.set(2, ton("0.25"));
-    self.limits.set(3, ton("0.5"));
-    self.limits.set(4, ton("0.75"));
+    self.limits.set(1, ton("20"));
+    self.limits.set(2, ton("200"));
+    self.limits.set(3, ton("2000"));
+    self.limits.set(4, ton("20000"));
   }
 
   receive(msg: ChangeCollection){

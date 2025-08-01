@@ -5,10 +5,10 @@ CREATE TABLE public.pig_levels (
 );
 
 INSERT INTO public.pig_levels (level, price, balance_limit) VALUES
-    (1, 100000000, 100000000),   -- price: 0.1 TON, limit: 0.10 TON
-    (2, 200000000, 250000000),   -- price: 0.2 TON, limit: 0.25 TON
-    (3, 300000000, 500000000),   -- price: 0.3 TON, limit: 0.50 TON
-    (4, 400000000, 750000000);   -- price: 0.4 TON, limit: 0.75 TON
+    (1, 4000000000, 20000000000),         -- price: 4 TON,    limit: 20 TON
+    (2, 40000000000, 200000000000),       -- price: 40 TON,   limit: 200 TON
+    (3, 400000000000, 2000000000000),     -- price: 400 TON,  limit: 2000 TON
+    (4, 4000000000000, 20000000000000);   -- price: 4000 TON, limit: 20000 TON
 
 CREATE OR REPLACE FUNCTION increment_piggy_bank_balance(
   wallet_address_in text,

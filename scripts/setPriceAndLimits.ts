@@ -19,23 +19,23 @@ export async function run() {
   const levelsAndLimits = [
     {
       level: 1n, // Level 1
-      price: toNano("0.1"), // 0.1 TON price
-      limit: toNano("0.1"), // 0.10 TON limit
+      price: toNano("4"),
+      limit: toNano("20"),
     },
     {
       level: 2n, // Level 2
-      price: toNano("0.2"), // 0.2 TON price
-      limit: toNano("0.25"), // 0.25 TON limit
+      price: toNano("40"),
+      limit: toNano("200"),
     },
     {
       level: 3n, // Level 3
-      price: toNano("0.3"), // 0.3 TON price
-      limit: toNano("0.5"), // 0.50 TON limit
+      price: toNano("400"),
+      limit: toNano("2000"),
     },
     {
       level: 4n, // Level 4
-      price: toNano("0.4"), // 0.4 TON price
-      limit: toNano("0.75"), // 0.75 TON limit
+      price: toNano("4000"),
+      limit: toNano("20000"),
     }
   ] as { level: bigint, price: bigint, limit: bigint }[];
 

@@ -4,6 +4,10 @@
   "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/imgs/pigs/gold.png",
   "attributes": [
     {
+      "trait_type": "Price, TON",
+      "value": 400
+    },
+    {
       "trait_type": "Levels",
       "value": 10
     },
@@ -12,8 +16,8 @@
       "value": 88572
     },
     {
-      "trait_type": "Max Balance",
-      "value": 0.5
+      "trait_type": "Max Balance, TON",
+      "value": 2000
     }
   ]
 }

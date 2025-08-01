@@ -51,10 +51,47 @@ describe("PigCreation Event Test", () => {
       success: true,
     });
 
+    await pigShop.send(
+      deployer.getSender(),
+      { value: toNano("1") },
+      {
+        $$type: "ChangeLimits",
+        level: 1n,
+        limit: toNano("0.1"),
+      }
+    );
+    await pigShop.send(
+      deployer.getSender(),
+      { value: toNano("1") },
+      {
+        $$type: "ChangeLimits",
+        level: 2n,
+        limit: toNano("0.25"),
+      }
+    );
+    await pigShop.send(
+      deployer.getSender(),
+      { value: toNano("1") },
+      {
+        $$type: "ChangeLimits",
+        level: 3n,
+        limit: toNano("0.5"),
+      }
+    );
+    await pigShop.send(
+      deployer.getSender(),
+      { value: toNano("1") },
+      {
+        $$type: "ChangeLimits",
+        level: 4n,
+        limit: toNano("0.75"),
+      }
+    );
+
     const collectionContent = {
       $$type: "Tep64TokenData" as const,
       flag: BigInt(1),
-      content: "https://example.com/collection.json",
+      content: "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/metadata/collection.json",
     };
 
     const royalty = {

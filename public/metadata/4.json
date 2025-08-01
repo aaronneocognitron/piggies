@@ -4,6 +4,10 @@
   "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/imgs/pigs/diamond.png",
   "attributes": [
     {
+      "trait_type": "Price, TON",
+      "value": 4000
+    },
+    {
       "trait_type": "Levels",
       "value": 12
     },
@@ -12,8 +16,8 @@
       "value": 797160
     },
     {
-      "trait_type": "Max Balance",
-      "value": 0.75
+      "trait_type": "Max Balance, TON",
+      "value": 20000
     }
   ]
 }

@@ -135,12 +135,12 @@ export async function findUsersBountyHunters(
     let usersDic = Dictionary.empty<Address, bigint>();
     let adminsDic = Dictionary.empty<Address, bigint>();
     let referrerDic = Dictionary.empty<Address, bigint>();
-    const pigCostInTon = await getPigPrice(upgradedPigLevel);
+    const pigCostInNano = BigInt(await getPigPrice(upgradedPigLevel));
 
     upperUsers.map((user) => {
       return usersDic.set(
         Address.parse(user.wallet_address),
-        BigInt(toNano(calcShares("user", upgradedPigLevel, pigCostInTon)))
+        calcShares("user", upgradedPigLevel, pigCostInNano)
       );
     });
     admins.map((admin) => {
@@ -148,7 +148,7 @@ export async function findUsersBountyHunters(
 
       adminsDic.set(
         Address.parse(admin.wallet_address),
-        BigInt(toNano(calcShares("admin", upgradedPigLevel, pigCostInTon)))
+        calcShares("admin", upgradedPigLevel, pigCostInNano)
       );
     });
 
@@ -156,7 +156,7 @@ export async function findUsersBountyHunters(
 
     referrerDic.set(
       Address.parse(referrer.wallet_address),
-      BigInt(toNano(calcShares("referrer", upgradedPigLevel, pigCostInTon)))
+      calcShares("referrer", upgradedPigLevel, pigCostInNano)
     );
 
     // ----------------------------------------------------
@@ -171,7 +171,7 @@ export async function findUsersBountyHunters(
     // console.log("admin dictionaries:", adminsDic);
     // console.log("user dictionaries:", usersDic);
     // console.log("referrer dictionaries:", referrerDic);
-    let change = BigInt(toNano(pigCostInTon)) - totalPaymentsSum;
+    let change = pigCostInNano - totalPaymentsSum;
     if (change > BigInt(0)) {
       const eachAdminShare = change / BigInt(adminsDic.keys().length);
       console.log("eachAdminShare", eachAdminShare);
@@ -224,18 +224,18 @@ async function calcTotalInvited(userId: string): Promise<number> {
 function calcShares(
   role: "admin" | "user" | "referrer",
   upgradedPigLevel: PigLevel,
-  pigCostInTon: number
-): number {
-  const userSharePercentage = upgradedPigLevel === 1 ? 20 : 5;
+  pigCostInNano: bigint
+): bigint {
+  const userSharePercentage = upgradedPigLevel === 1 ? 20n : 5n;
   switch (role) {
     case "admin":
-      return (pigCostInTon * 20) / 100;
+      return (pigCostInNano * 20n) / 100n;
     case "referrer":
-      return (pigCostInTon * 20) / 100;
+      return (pigCostInNano * 20n) / 100n;
     case "user":
-      return (pigCostInTon * userSharePercentage) / 100;
+      return (pigCostInNano * userSharePercentage) / 100n;
     default:
-      return 0;
+      return 0n;
   }
 }
 
