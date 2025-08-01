@@ -3,14 +3,13 @@ import { PigCollection, Tep64TokenData } from "../wrappers/PigCollection";
 import { PigShop } from "../wrappers/PigShop";
 import { NetworkProvider } from "@ton/blueprint";
 
-// TODO: replace with metadata urls
 export const tep64TokenData: Tep64TokenData = {
   $$type: "Tep64TokenData",
   flag: BigInt("1"),
-  content: "https://",
+  content: "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/metadata/collection.json",
 };
 
-export const itemPrefix = "https://";
+export const itemPrefix = "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/metadata/";
 
 export async function run(provider: NetworkProvider) {
   const pigShop = provider.open(
