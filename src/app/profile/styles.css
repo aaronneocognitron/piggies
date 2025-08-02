@@ -41,6 +41,8 @@
 }
 .profile-container .wallet-address-container .wallet-address .copy-btn img {
   width: 24px;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 .profile-container .wallet-address-container .disconnect-btn {
   margin-top: 15px;

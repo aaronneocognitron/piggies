@@ -257,7 +257,7 @@ export default function FriendsPage() {
         <div className="invite-container">
           <h3 className="title">{t("friendsPage.title")}</h3>
           <div className="invite-link">
-            <h3 className="link">{truncate(refLink, 25)}</h3>
+            <h3 className="link">{refLink}</h3>
             {(!currentPigCode || currentPigCode === 0) && (
                 <img className="pig-icon" src="/imgs/icons/bank.png" alt="PIG" />
             )}

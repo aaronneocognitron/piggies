@@ -40,6 +40,8 @@
         }
         img {
           width: 24px;
+          user-select: none;
+          -webkit-user-drag: none;
         }
       }
     }

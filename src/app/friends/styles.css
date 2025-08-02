@@ -25,6 +25,9 @@
 .friends-container .invite-container .invite-link .link {
   color: #facefd;
   font-size: 20px;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .friends-container .invite-container .invite-link .pig-icon {
   display: inline;
@@ -46,6 +49,8 @@
 }
 .friends-container .invite-container .invite-link .copy-btn img {
   width: 24px;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 .friends-container .invite-container .hint {
   margin-top: 8px;

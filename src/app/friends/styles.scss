@@ -24,6 +24,9 @@
       .link {
         color: #facefd;
         font-size: 20px;
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .pig-icon {
@@ -46,6 +49,8 @@
         }
         img {
           width: 24px;
+          user-select: none;
+          -webkit-user-drag: none;
         }
       }
     }
