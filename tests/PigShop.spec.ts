@@ -91,7 +91,7 @@ describe("PigCreation Event Test", () => {
     const collectionContent = {
       $$type: "Tep64TokenData" as const,
       flag: BigInt(1),
-      content: "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/metadata/collection.json",
+      content: "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/metadata/collection.json",
     };
 
     const royalty = {

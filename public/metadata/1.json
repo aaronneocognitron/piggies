@@ -1,11 +1,11 @@
 {
   "name": "Bronze PIG",
   "description": "Bronze PIG",
-  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/imgs/pigs/bronze.png",
+  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/imgs/pigs/bronze.png",
   "attributes": [
     {
       "trait_type": "Price, TON",
-      "value": 4
+      "value": 3
     },
     {
       "trait_type": "Levels",
@@ -17,7 +17,7 @@
     },
     {
       "trait_type": "Max Balance, TON",
-      "value": 20
+      "value": 15
     }
   ]
 }

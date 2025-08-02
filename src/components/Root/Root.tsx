@@ -57,7 +57,7 @@ function RootInner({ children }: PropsWithChildren) {
 
   return (
     <AppRoot className={"main-content"}>
-      <TonConnectUIProvider manifestUrl="https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/tonconnect-manifest.json">
+      <TonConnectUIProvider manifestUrl="https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/tonconnect-manifest.json">
         <WalletContextProvider>
           <AccountContextProvider>
             <WalletGuard>

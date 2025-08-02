@@ -1,11 +1,11 @@
 {
   "name": "Diamond PIG",
   "description": "Diamond PIG",
-  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/imgs/pigs/diamond.png",
+  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/imgs/pigs/diamond.png",
   "attributes": [
     {
       "trait_type": "Price, TON",
-      "value": 4000
+      "value": 3000
     },
     {
       "trait_type": "Levels",
@@ -17,7 +17,7 @@
     },
     {
       "trait_type": "Max Balance, TON",
-      "value": 20000
+      "value": 15000
     }
   ]
 }

@@ -1,11 +1,11 @@
 {
   "name": "Silver PIG",
   "description": "Silver PIG",
-  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/feat/development/public/imgs/pigs/silver.png",
+  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/imgs/pigs/silver.png",
   "attributes": [
     {
       "trait_type": "Price, TON",
-      "value": 40
+      "value": 30
     },
     {
       "trait_type": "Levels",
@@ -17,7 +17,7 @@
     },
     {
       "trait_type": "Max Balance, TON",
-      "value": 200
+      "value": 150
     }
   ]
 }
