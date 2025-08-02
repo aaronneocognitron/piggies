@@ -110,12 +110,15 @@ export default async function handler(
     });
   }
 
-  // Optional: Check if user with this telegram_id already exists to prevent duplicates
-  const { data: user } = await supabase
-    .from("users")
-    .select()
-    .eq("wallet_address", wallet_address)
-    .maybeSingle();
+  const [{ data: user }, { id: inviter_id }] = await Promise.all([
+    supabase
+      .from("users")
+      .select()
+      .eq("wallet_address", wallet_address)
+      .maybeSingle(),
+      (referral_id ? getUserByReferralId(String(referral_id)) : Promise.resolve(null))
+          .then(res => res || { id: null }),
+  ]);
 
   // user exists
   if (user) {
@@ -124,6 +127,7 @@ export default async function handler(
       .update({
         telegram_id: telegram_id,
         fullname: fullname,
+        inviter_id: ((user.current_pig || referral_id === process.env.NEXT_PUBLIC_DEFAULT_REFFERAL_ID) ? undefined : inviter_id) || user.inviter_id,
       })
       .eq("wallet_address", wallet_address)
       .select()
@@ -137,18 +141,11 @@ export default async function handler(
     return res.status(200).json({ success: true, user: updateData });
   }
 
-  // get the inviter id
-  let { id: inviter_id } = await getUserByReferralId(String(referral_id)) || await getGenesisUser() || { id: null }; //TODO: delete fallback to genesis user?
-  if (inviter_id === null) return res.status(400).json({
-      success: false,
-      message: "Invalid referral_id",
-  });
-
   const { data: insertData, error } = await supabase
     .from("users")
     .insert({
       telegram_id: telegram_id,
-      inviter_id: inviter_id,
+      inviter_id: inviter_id || (await getGenesisUser())!.id,
       parent_id: null,
       fullname: fullname,
       wallet_address: wallet_address,

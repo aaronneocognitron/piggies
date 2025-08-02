@@ -22,8 +22,6 @@ type WalletContextProviderProps = {
   children: ReactNode;
 };
 
-const txRequestLifetime = Date.now() + 3 * 60 * 1000; // 3 minutes for user to approve
-
 export const WalletContextProvider = ({ children }: WalletContextProviderProps) => {
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
@@ -49,7 +47,7 @@ export const WalletContextProvider = ({ children }: WalletContextProviderProps) 
                 payload: args.body?.toBoc()?.toString("base64"),
               },
             ],
-            validUntil: txRequestLifetime,
+            validUntil: Date.now() + 3 * 60 * 1000, // 3 minutes for user to approve
           });
         },
         address: walletAddress,

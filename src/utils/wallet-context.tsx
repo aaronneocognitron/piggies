@@ -3,8 +3,6 @@ import { Address, SenderArguments, TonClient, type Sender } from "@ton/ton";
 import { TonApiClient } from "@ton-api/client";
 import { TonConnectUI, useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 
-const txRequestLifetime = Date.now() + 3 * 60 * 1000; // 3 minutes for user to approve
-
 function useWalletConnection() {
   const [tonConnectUI] = useTonConnectUI();
   const walletAddress = useTonAddress();
@@ -29,7 +27,7 @@ function useWalletConnection() {
                 payload: args.body?.toBoc()?.toString("base64"),
               },
             ],
-            validUntil: txRequestLifetime,
+            validUntil: Date.now() + 3 * 60 * 1000, // 3 minutes for user to approve
           });
         },
         address: walletAddress,

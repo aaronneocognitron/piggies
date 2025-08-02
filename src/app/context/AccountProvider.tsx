@@ -50,7 +50,7 @@ export const AccountContextProvider = ({ children }: AccountContextProviderProps
             .patch<{ success: true, user: User } | { success: false, message: string }>(`/api/register`, {
               wallet_address: walletAddress,
               telegram_id: userTelegramId,
-              referral_id: refId || "",
+              referral_id: refId || process.env.NEXT_PUBLIC_DEFAULT_REFFERAL_ID || "",
               fullname: userTelegramFullName,
             });
           if (!response.data.success) throw new Error(response.data.message);
