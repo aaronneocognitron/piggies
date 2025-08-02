@@ -10,8 +10,9 @@ import axios from "axios";
 import { useTonWallet } from "@tonconnect/ui-react";
 import { fromNano } from "@ton/core";
 import { useWallet } from "@/app/context/WalletProvider";
+import { formatDate } from "@/utils/formatters";
 
-type Reward = {
+export type Reward = {
   created_at: Date;
   fullname: string;
   upgraded_pig_level: number;
@@ -61,13 +62,6 @@ export default function HistoryPage() {
   const findPig = (code: number) => {
     return pigsMap.find((item) => item.code === code);
   };
-
-  function formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, "0"); // months are 0-indexed
-    const day = `${date.getDate()}`.padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  }
 
   return (
     <Page>

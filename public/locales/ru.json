@@ -79,6 +79,11 @@
       "title": "Раздел в разработке",
       "description": "Здесь будет ваша коллекция NFT"
     },
+    "adminPage": {
+      "loading": "Загружается...",
+      "user": "Юзер",
+      "admin": "Админ"
+    },
     "balance": "Баланс",
     "earnings": "Доходы",
     "earningsAmount": "{amount} / {currentPigPrice} $",

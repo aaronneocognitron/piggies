@@ -79,6 +79,11 @@
       "title": "Section under development",
       "description": "Your NFT collection will be here"
     },
+    "adminPage": {
+      "loading": "Loading...",
+      "user": "User",
+      "admin": "Admin"
+    },
     "balance": "Balance",
     "earnings": "Earnings",
     "earningsAmount": "{amount} / {currentPigPrice} $",

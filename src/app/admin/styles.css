@@ -1,0 +1,171 @@
+.admin-container {
+  display: contents;
+}
+.admin-container .input-form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.admin-container .input-form > :first-child, .admin-container .input-form > :first-child::after {
+  flex: 1;
+  background: transparent;
+}
+.admin-container .input-form .wallet-input {
+  background-color: rgba(11, 11, 11, 0.3529411765);
+}
+.admin-container .input-form .fetch-button {
+  background-color: #2cc48f;
+  color: #fff;
+  margin-right: 22px;
+}
+.admin-container .loader {
+  margin: auto;
+  text-align: center;
+}
+.admin-container .user-info-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+.admin-container .user-info-container .balance-container {
+  text-align: center;
+  padding-bottom: 8px;
+}
+.admin-container .user-info-container .balance-container .withdraw-btn {
+  margin-left: auto;
+  min-height: 32px;
+  height: auto;
+  color: #691d82;
+  border-radius: 34px;
+}
+@media (min-height: 700px) {
+  .admin-container .user-info-container .balance-container .withdraw-btn {
+    margin-top: 10px;
+  }
+}
+.admin-container .user-info-container .balance-container .withdraw-btn > * {
+  text-wrap: auto;
+}
+.admin-container .user-info-container .balance-container .withdraw-btn:disabled {
+  background-color: #e73d74;
+  opacity: 1;
+}
+.admin-container .user-info-container .balance-container .withdraw-btn:enabled {
+  background-color: #ebb319;
+}
+.admin-container .user-info-container .balance-container .balance-info {
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1vh, 10px);
+}
+.admin-container .user-info-container .balance-container .pig-image {
+  width: clamp(2rem, 4vh, 42px);
+  height: auto;
+}
+.admin-container .user-info-container .balance-container .text {
+  font-size: clamp(1rem, 2.25vh, 26px);
+}
+.admin-container .user-info-container .balance-container .text h4 {
+  display: inline;
+}
+.admin-container .user-info-container .balance-container .text .earning {
+  color: #ffbe0b;
+}
+.admin-container .user-info-container .balance-container .text .total {
+  font-weight: 200;
+  color: #facefd;
+}
+.admin-container .user-info-container .balance-container .fullness-warning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 10px;
+  color: #facefd;
+  font-weight: bold;
+  font-size: clamp(0.75rem, 1.75vh, 20px);
+  line-height: 1;
+}
+.admin-container .user-info-container .balance-container .fullness-warning .warning-icon {
+  width: auto;
+  height: clamp(1rem, 2vh, 24px);
+  object-fit: contain;
+}
+.admin-container .user-info-container .history-container {
+  min-height: 0;
+  height: auto;
+  overflow: auto;
+}
+.admin-container .user-info-container .history-container .empty-state-container {
+  margin: auto 0;
+  text-align: center;
+}
+.admin-container .user-info-container .history-container .empty-state-container .empty {
+  font-size: 24px;
+  font-weight: 200;
+  color: #facefd;
+}
+.admin-container .user-info-container .history-container .empty-state-container .mag-pic {
+  width: 30%;
+  min-width: min(200px, 100vh - 230px);
+}
+.admin-container .user-info-container .history-container .empty-state-container .empty-text h2 {
+  font-weight: 100;
+}
+.admin-container .user-info-container .history-container .reached-end {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 200;
+  color: #fff;
+}
+.admin-container .user-info-container .history-container .history-item {
+  display: flex;
+  padding: 4px 14px;
+  justify-content: space-between;
+  align-items: center;
+}
+.admin-container .user-info-container .history-container .history-item:not(:last-child) {
+  border-bottom: 2px solid rgba(161, 161, 161, 0.4196078431);
+}
+.admin-container .user-info-container .history-container .history-item .details h2 {
+  margin: 0;
+}
+.admin-container .user-info-container .history-container .history-item .details .head {
+  margin-bottom: 4px;
+}
+.admin-container .user-info-container .history-container .history-item .details .head h2 {
+  font-size: 24px;
+}
+.admin-container .user-info-container .history-container .history-item .details .head h2 .level {
+  font-size: 20px;
+  font-weight: 100;
+}
+.admin-container .user-info-container .history-container .history-item .details .middle {
+  margin-bottom: 4px;
+}
+.admin-container .user-info-container .history-container .history-item .details .middle h2 {
+  color: #facefd;
+  font-size: 16px;
+  font-weight: 100;
+}
+.admin-container .user-info-container .history-container .history-item .details .middle h2 .pig-title {
+  font-weight: 800;
+}
+.admin-container .user-info-container .history-container .history-item .details .footer {
+  margin-bottom: 4px;
+}
+.admin-container .user-info-container .history-container .history-item .details .footer h2 {
+  font-size: 20px;
+}
+.admin-container .user-info-container .history-container .history-item .details .footer h2 .balance {
+  color: #2cc48f;
+}
+.admin-container .user-info-container .history-container .history-item .details .footer h2 .balance.withdraw {
+  color: #c42c8f;
+}
+.admin-container .user-info-container .history-container .history-item .cover img {
+  width: 68px;
+}

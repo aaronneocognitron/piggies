@@ -39,7 +39,7 @@ export function WalletGuard({ children }: { children: React.ReactNode }) {
   }, [tonConnectUI]);
 
   useEffect(() => {
-    if (!initialized) return;
+    if (!initialized || pathname === '/admin') return;
 
     // if (isUserRegistered) {
     //   if (pathname === "/register") {
@@ -70,7 +70,7 @@ export function WalletGuard({ children }: { children: React.ReactNode }) {
     }
   }, [initialized, wallet, pathname, router, user, refId]);
 
-  if ((!initialized || !wallet) && pathname !== "/wallet-connect") {
+  if ((!initialized || !wallet) && pathname !== "/wallet-connect" && pathname !== "/admin") {
     return (
       <div className="root__loading">
         <Spinner size="l" />

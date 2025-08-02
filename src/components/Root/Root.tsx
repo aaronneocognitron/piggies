@@ -20,7 +20,7 @@ import { setLocale } from "@/core/i18n/locale";
 import { init } from "@/core/init";
 
 import "./styles.css";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { WalletGuard } from "@/components/WalletGuard";
 
 const isDev =
@@ -71,11 +71,9 @@ function RootInner({ children }: PropsWithChildren) {
 }
 
 export function Root(props: PropsWithChildren) {
+  const pathname = usePathname();
   // Mock Telegram environment in development mode if needed.
-  if (isDev) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useTelegramMock();
-  }
+  useTelegramMock(isDev || pathname === '/admin');
 
   const didMount = useDidMount();
 

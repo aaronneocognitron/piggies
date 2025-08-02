@@ -10,8 +10,9 @@ import {
 /**
  * Mocks Telegram environment in development mode.
  */
-export function useTelegramMock(): void {
+export function useTelegramMock(isDev: boolean): void {
   useClientOnce(() => {
+    if (!isDev) return;
     // if (sessionStorage.getItem("env-mocked") && isTMA("simple")) {
     //   return;
     // }
