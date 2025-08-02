@@ -31,7 +31,7 @@ CREATE TABLE public.rewards_history (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   wallet_address text NOT NULL,
-  reward integer NOT NULL,
+  reward bigint NOT NULL,
   referral text NOT NULL,
   related_tx text NOT NULL,
   CONSTRAINT rewards_history_pkey PRIMARY KEY (id),
