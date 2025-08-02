@@ -19,23 +19,23 @@ export async function run() {
   const levelsAndLimits = [
     {
       level: 1n, // Level 1
-      price: toNano("4"),
-      limit: toNano("20"),
+      price: toNano("3"),
+      limit: toNano("15"),
     },
     {
       level: 2n, // Level 2
-      price: toNano("40"),
-      limit: toNano("200"),
+      price: toNano("30"),
+      limit: toNano("150"),
     },
     {
       level: 3n, // Level 3
-      price: toNano("400"),
-      limit: toNano("2000"),
+      price: toNano("300"),
+      limit: toNano("1500"),
     },
     {
       level: 4n, // Level 4
-      price: toNano("4000"),
-      limit: toNano("20000"),
+      price: toNano("3000"),
+      limit: toNano("15000"),
     }
   ] as { level: bigint, price: bigint, limit: bigint }[];
 
@@ -51,7 +51,7 @@ export async function run() {
         }
     );
 
-    await new Promise(res => setTimeout(res, 10000));
+    await new Promise(res => setTimeout(res, 12000));
 
     console.log(`ChangeLimits message sent for level ${level.toString()} with limit ${fromNano(limit)} TON`);
 
