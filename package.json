@@ -11,12 +11,14 @@
     "listener": "ts-node -r tsconfig-paths/register -r dotenv/config scripts/listener.ts",
     "withdraw": "ts-node -r tsconfig-paths/register -r dotenv/config scripts/withdraw.ts",
     "setPriceAndLimits": "ts-node -r tsconfig-paths/register -r dotenv/config scripts/setPriceAndLimits.ts",
+    "bot:setup": "ts-node -r tsconfig-paths/register -r dotenv/config scripts/setupTelegramWebhook.ts",
+    "bot:remove": "ts-node -r tsconfig-paths/register -r dotenv/config scripts/removeTelegramWebhook.ts",
     "bp:bp": "blueprint",
     "bp:start": "blueprint run",
     "bp:build": "blueprint build",
     "bp:deploy": "blueprint run deploy",
     "bp:test": "jest --verbose",
-    "all:build": "blueprint build --all && next build"
+    "all:build": "blueprint build --all && next build && pnpm run bot:setup"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
@@ -42,6 +44,7 @@
     "next": "14.2.4",
     "next-intl": "^3.17.6",
     "next-swagger-doc": "0.4.1",
+    "node-telegram-bot-api": "^0.66.0",
     "normalize.css": "^8.0.1",
     "react": "^18",
     "react-dom": "^18",
@@ -58,6 +61,7 @@
     "@ton/tolk-js": ">=0.11.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.14.1",
+    "@types/node-telegram-bot-api": "^0.64.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
