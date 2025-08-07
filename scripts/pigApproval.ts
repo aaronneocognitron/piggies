@@ -15,7 +15,6 @@ import {
 } from "../build/PigShop/tact_PigShop";
 import { bountyHuntersResponse } from "@/models/purchase";
 import { keyPairFromEnv } from "./helpers";
-import { fileSystemLogger } from "@/utils/fsLogger";
 
 export async function sendPigApproval(
   bh: bountyHuntersResponse,
@@ -47,7 +46,6 @@ export async function sendPigApproval(
 
     console.log("PigApproval message sent.");
   } catch (err) {
-    fileSystemLogger.error("error sending the pig approval", err);
     console.error("error sending the pig approval", err);
   }
 

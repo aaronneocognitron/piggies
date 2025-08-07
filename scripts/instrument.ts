@@ -7,4 +7,11 @@ Sentry.init({
     // Adds request headers and IP for users, for more info visit:
     // https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/#sendDefaultPii
     sendDefaultPii: true,
+
+    enableLogs: true,
+
+    integrations: [
+        // send console.log, console.error, and console.warn calls as logs to Sentry
+        Sentry.consoleLoggingIntegration({ levels: ["log", "error", "warn"] }),
+    ],
 });
