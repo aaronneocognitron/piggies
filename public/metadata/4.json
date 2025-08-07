@@ -1,23 +1,5 @@
 {
   "name": "Diamond PIG",
   "description": "Diamond PIG",
-  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/imgs/pigs/diamond.png",
-  "attributes": [
-    {
-      "trait_type": "Price, TON",
-      "value": 3000
-    },
-    {
-      "trait_type": "Levels",
-      "value": 12
-    },
-    {
-      "trait_type": "Slots",
-      "value": 797160
-    },
-    {
-      "trait_type": "Max Balance, TON",
-      "value": 15000
-    }
-  ]
+  "image": "https://pig.bigpig.pro/imgs/pigs/diamond.png"
 }

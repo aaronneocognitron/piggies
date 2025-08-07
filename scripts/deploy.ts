@@ -6,10 +6,10 @@ import { NetworkProvider } from "@ton/blueprint";
 export const tep64TokenData: Tep64TokenData = {
   $$type: "Tep64TokenData",
   flag: BigInt("1"),
-  content: "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/metadata/collection.json",
+  content: "https://pig.bigpig.pro/metadata/collection.json",
 };
 
-export const itemPrefix = "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/metadata/";
+export const itemPrefix = "https://pig.bigpig.pro/metadata/";
 
 export async function run(provider: NetworkProvider) {
   const pigShop = provider.open(

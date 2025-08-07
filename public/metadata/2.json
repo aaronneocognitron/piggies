@@ -1,23 +1,5 @@
 {
   "name": "Silver PIG",
   "description": "Silver PIG",
-  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/imgs/pigs/silver.png",
-  "attributes": [
-    {
-      "trait_type": "Price, TON",
-      "value": 30
-    },
-    {
-      "trait_type": "Levels",
-      "value": 7
-    },
-    {
-      "trait_type": "Slots",
-      "value": 3279
-    },
-    {
-      "trait_type": "Max Balance, TON",
-      "value": 150
-    }
-  ]
+  "image": "https://pig.bigpig.pro/imgs/pigs/silver.png"
 }

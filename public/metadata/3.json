@@ -1,23 +1,5 @@
 {
   "name": "Golden PIG",
   "description": "Golden PIG",
-  "image": "https://raw.githubusercontent.com/aaronneocognitron/piggies/refs/heads/production/public/imgs/pigs/gold.png",
-  "attributes": [
-    {
-      "trait_type": "Price, TON",
-      "value": 300
-    },
-    {
-      "trait_type": "Levels",
-      "value": 10
-    },
-    {
-      "trait_type": "Slots",
-      "value": 88572
-    },
-    {
-      "trait_type": "Max Balance, TON",
-      "value": 1500
-    }
-  ]
+  "image": "https://pig.bigpig.pro/imgs/pigs/gold.png"
 }
