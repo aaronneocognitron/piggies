@@ -24,6 +24,10 @@ export const AccountContextProvider = ({ children }: AccountContextProviderProps
   const [user, setUser] = useState<User | null>(null);
   const [isRegisterRequestSent, setIsRegisterRequestSent] = useState(false);
 
+  useEffect(() => {
+    console.log('AccountContextProvider initDataState:', initDataState);
+  }, [initDataState]);
+
   const refId = useMemo(() => initDataState?.start_param?.startsWith("register_")
     ? initDataState.start_param.split("_")[1]
     : null,
