@@ -8,6 +8,7 @@ import { initData, useSignal } from "@telegram-apps/sdk-react";
 
 type AccountContextType = {
   user: User | null;
+  inviter: User | null;
   refetchUserData: () => Promise<User>;
   initDataState: ReturnType<ReturnType<typeof useSignal<(typeof initData)["state"]>>>;
 };
@@ -22,6 +23,7 @@ export const AccountContextProvider = ({ children }: AccountContextProviderProps
   const { walletAddress } = useWallet();
   const initDataState = useSignal(initData.state);
   const [user, setUser] = useState<User | null>(null);
+  const [inviter, setInviter] = useState<User | null>(null);
   const [isRegisterRequestSent, setIsRegisterRequestSent] = useState(false);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export const AccountContextProvider = ({ children }: AccountContextProviderProps
       const handleRegister = async () => {
         try {
           const response = await axios
-            .patch<{ success: true, user: User } | { success: false, message: string }>(`/api/register`, {
+            .patch<{ success: true, user: User, inviter: User } | { success: false, message: string }>(`/api/register`, {
               wallet_address: walletAddress,
               telegram_id: userTelegramId,
               referral_id: refId || process.env.NEXT_PUBLIC_DEFAULT_REFFERAL_ID || "",
@@ -59,6 +61,7 @@ export const AccountContextProvider = ({ children }: AccountContextProviderProps
             });
           if (!response.data.success) throw new Error(response.data.message);
           setUser(response.data.user);
+          setInviter(response.data.inviter || null);
         } catch (err: any) {
           console.error(err);
           return null;
@@ -86,6 +89,7 @@ export const AccountContextProvider = ({ children }: AccountContextProviderProps
     <AccountContext.Provider
       value={{
         user,
+        inviter,
         refetchUserData,
         initDataState,
       }}

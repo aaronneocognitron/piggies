@@ -60,7 +60,8 @@
       "goldPigs": "Golden PIG: {number}",
       "diamondPigs": "Diamond PIG: {number}",
       "yourRefs": "{number} your refs",
-      "invitationSomeone": "You need to invite friends!"
+      "invitationSomeone": "You need to invite friends!",
+      "yourReferrer": "Your referrer"
     },
     "historiesPage": {
       "noHistories": "No history yet...",

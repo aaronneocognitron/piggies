@@ -43,7 +43,7 @@ export type Invitee = {
 export default function FriendsPage() {
   const t = useTranslations("i18n");
   const { walletAddress } = useWallet();
-  const { user, initDataState } = useAccount();
+  const { user, inviter, initDataState } = useAccount();
   const [isCopied, setIsCopied] = useState(false);
   const [currentPigCode, setCurrentPigCode] = useState<number | undefined>();
   const [openedAccordion, setOpenedAccordion] = useState<
@@ -255,6 +255,11 @@ export default function FriendsPage() {
     <Page>
       <div className="friends-container">
         <div className="invite-container">
+            {inviter && (
+                <p className="referrer-info">
+                    {t("friendsPage.yourReferrer")}: {inviter.fullname}
+                </p>
+            )}
           <h3 className="title">{t("friendsPage.title")}</h3>
           <div className="invite-link">
             <h3 className="link">{refLink}</h3>

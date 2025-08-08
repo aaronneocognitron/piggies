@@ -138,7 +138,12 @@ export default async function handler(
         .status(500)
         .json({ success: false, message: `Database update error ${error}` });
     }
-    return res.status(200).json({ success: true, user: updateData });
+    const { data: inviter } = await supabase
+      .from("users")
+      .select()
+      .eq("id", updateData.inviter_id)
+      .single();
+    return res.status(200).json({ success: true, user: updateData, inviter });
   }
 
   const { data: insertData, error } = await supabase
@@ -161,6 +166,12 @@ export default async function handler(
       .json({ success: false, message: `Database insert error ${error}` });
   }
 
+  const { data: inviter } = await supabase
+    .from("users")
+    .select()
+    .eq("id", insertData.inviter_id)
+    .single();
+
   // Successfully inserted
-  return res.status(201).json({ success: true, user: insertData });
+  return res.status(201).json({ success: true, user: insertData, inviter });
 }

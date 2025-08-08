@@ -5,6 +5,15 @@
     max-width: 360px;
     margin: auto;
 
+    .referrer-info {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0.75;
+      top: 0;
+      left: 0;
+      margin: 0 0 0 1rem;
+    }
+
     .title {
       font-weight: 600;
       text-align: center;
