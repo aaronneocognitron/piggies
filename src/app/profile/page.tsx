@@ -90,7 +90,7 @@ export default function ProfilePage() {
           </Button>
         </div>
         <span className="version-field">
-          v3.3.9-tst
+          v3.4.0-tst
         </span>
       </div>
     </Page>
