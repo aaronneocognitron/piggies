@@ -175,8 +175,10 @@ async function catchPigShopEvents(
       );
 
       const userAddr = event.userAddress.toRawString();
-      let user = await getUser(userAddr);
-      const pig_data = await getPigs(userAddr);
+      const [user, pig_data] = await Promise.all([
+          getUser(userAddr),
+          getPigs(userAddr),
+      ]);
       console.log("🐷 Pig data loaded:", pig_data);
 
       if (pig_data.old_pig_level === 0 && !pig_data.address) {
