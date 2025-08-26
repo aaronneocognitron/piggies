@@ -32,9 +32,6 @@
 
     .withdraw-btn {
       margin-left: auto;
-      @media (min-height: 700px) {
-        margin-top: 10px;
-      }
       min-height: 32px;
       height: auto;
       color: #691d82;
@@ -50,13 +47,16 @@
         background-color: #ebb319;
       }
     }
-    .balance-info {
+    .balance-info, .token-balance-info {
       padding: 0 15px;
       display: flex;
       align-items: center;
       gap: clamp(0.5rem, 1vh, 10px);
     }
-    .ton-icon {
+    .token-balance-info {
+      margin-top: 10px;
+    }
+    .ton-icon, .token-icon {
       width: clamp(2rem, 4vh, 42px);
     }
     .text {

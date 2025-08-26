@@ -38,11 +38,6 @@
   color: #691d82;
   border-radius: 34px;
 }
-@media (min-height: 700px) {
-  .store-container .balance-container .withdraw-btn {
-    margin-top: 10px;
-  }
-}
 .store-container .balance-container .withdraw-btn > * {
   text-wrap: auto;
 }
@@ -53,13 +48,16 @@
 .store-container .balance-container .withdraw-btn:enabled {
   background-color: #ebb319;
 }
-.store-container .balance-container .balance-info {
+.store-container .balance-container .balance-info, .store-container .balance-container .token-balance-info {
   padding: 0 15px;
   display: flex;
   align-items: center;
   gap: clamp(0.5rem, 1vh, 10px);
 }
-.store-container .balance-container .ton-icon {
+.store-container .balance-container .token-balance-info {
+  margin-top: 10px;
+}
+.store-container .balance-container .ton-icon, .store-container .balance-container .token-icon {
   width: clamp(2rem, 4vh, 42px);
 }
 .store-container .balance-container .text {

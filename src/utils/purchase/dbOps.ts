@@ -282,7 +282,7 @@ export async function isDuplicatePurchase(
 export async function getPigsInfos() {
   const { data, error: fetchError } = await supabase
       .from("pig_levels")
-      .select("level, price, balance_limit");
+      .select("level, price, balance_limit, tokens_per_day, token_limit");
 
   if (fetchError) throw fetchError;
   return data;

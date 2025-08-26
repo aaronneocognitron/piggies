@@ -7,7 +7,7 @@ import "./styles.css";
 import { Button } from "@telegram-apps/telegram-ui";
 import React from "react";
 import { pigsMapV2 } from "@/utils/pigs_map";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, isAxiosError } from "axios";
 import PigCard from "@/components/PigCard/PigCard";
 import SuggestionSlider from "@/components/SuggestionSlider/SuggestionSlider";
 import { logger } from "../../../logger";
@@ -25,6 +25,7 @@ import { Pig } from "../../../wrappers/Pig";
 import { ContractAddresses } from "../../../scripts/constants";
 import { useWallet } from "@/app/context/WalletProvider";
 import { useAccount } from "@/app/context/AccountProvider";
+import { ClaimTokensResponse } from "@/models/claimTokens";
 
 type PigData = {
   pig_level: number;
@@ -42,6 +43,7 @@ export default function StorePage() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   //const [tonPrice, setTonPrice] = useState(0);
   const [isPurchaseInProgress, setIsPurchaseInProgress] = useState(false);
+  const [tokenBalance, setTokenBalance] = useState(0);
 
   const userTelegramId = useMemo(() => initDataState?.user?.id, [initDataState]);
 
@@ -154,6 +156,28 @@ export default function StorePage() {
 
     setIsPurchaseInProgress(false);
     setIsConfirmModalOpen(false);
+  };
+
+  const handleTokenWithdrawal = async () => {
+      try {
+          const response = await axios.post<ClaimTokensResponse>(`/api/pigs/claimTokens`, {
+              wallet_address: walletAddress,
+              telegram_id: userTelegramId,
+          });
+
+          if(!response.data.success) throw new Error(response.data.message);
+
+          alert(`You successfully claimed ${response.data.tokens} PIG`);
+
+          await fetchPigsData();
+          await refetchUserData();
+      } catch (e) {
+          if(isAxiosError(e)) {
+              alert(e.response?.data?.message ?? e.message);
+          } else {
+              console.error(e);
+          }
+      }
   };
 
   // const fetchTonPrice = async () => {
@@ -400,8 +424,25 @@ export default function StorePage() {
     (slide) => slide.code > (currentPigCode || 0)
   );
   const nextPigClassName = nextPig?.className || '';
+  
+  const currentPigInfo = pigsInfo?.find(pig => pig.level === (currentPigCode ?? 0));
 
-  const fullnessPercent = Number.EPSILON + (+fromNano(user?.piggy_bank_balance ?? 0) / (+fromNano(pigsInfo?.find(pig => pig.level === (currentPigCode ?? 0))?.balance_limit ?? 0) || Number.POSITIVE_INFINITY) || 0);
+  const fullnessPercent = Number.EPSILON + (+fromNano(user?.piggy_bank_balance ?? 0) / (+fromNano(currentPigInfo?.balance_limit ?? 0) || Number.POSITIVE_INFINITY) || 0);
+
+  useEffect(() => {
+      const updateTokenBalance = () => {
+          setTokenBalance(Math.min(
+              currentPigInfo?.token_limit ?? 0,
+              (user?.token_balance ?? 0) + (Date.now() - +new Date(user?.accrual_start ?? Date.now())) * (currentPigInfo?.tokens_per_day ?? 0) / (24*60*60*1000)
+          ));
+      };
+
+      if (!tokenBalance) updateTokenBalance();
+
+      const timeout = setTimeout(updateTokenBalance, 3000);
+
+      return () => clearTimeout(timeout);
+  }, [tokenBalance, currentPigInfo, user]);
 
   return (
     <>
@@ -472,12 +513,26 @@ export default function StorePage() {
                 <img src="/imgs/icons/ton.png" alt="ton-icon" className="ton-icon" />
                 <span className="text">
                   <h4 className="earning">{+parseFloat(fromNano(user?.piggy_bank_balance ?? 0)).toFixed(3)}</h4>{" "}
-                  <h4 className="total">/ {fromNano(pigsInfo?.find(pig => pig.level === (currentPigCode ?? 0))?.balance_limit ?? 0)} TON</h4>
+                  <h4 className="total">/ {fromNano(currentPigInfo?.balance_limit ?? 0)} TON</h4>
                 </span>
                 <Button
                     className="withdraw-btn"
                     disabled={fullnessPercent <= Number.EPSILON}
                     onClick={handleWithdrawal}
+                >
+                  {t("storePage.withdraw")}
+                </Button>
+              </div>
+              <div className="token-balance-info">
+                <img src="/imgs/icons/bank.png" alt="token-icon" className="token-icon" />
+                <span className="text">
+                  <h4 className="earning">{+tokenBalance.toFixed(0)}</h4>{" "}
+                  <h4 className="total">/ {(currentPigInfo?.token_limit ?? 0)} PIG</h4>
+                </span>
+                <Button
+                    className="withdraw-btn"
+                    disabled={tokenBalance <= 1}
+                    onClick={handleTokenWithdrawal}
                 >
                   {t("storePage.withdraw")}
                 </Button>

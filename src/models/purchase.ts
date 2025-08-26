@@ -20,6 +20,8 @@ export type PigInfo = {
   level: PigLevel;
   price: number;
   balance_limit: number;
+  tokens_per_day: number;
+  token_limit: number;
 };
 
 export type PigInfosResponse = {
