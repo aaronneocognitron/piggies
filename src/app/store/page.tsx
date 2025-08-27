@@ -524,7 +524,7 @@ export default function StorePage() {
                 </Button>
               </div>
               <div className="token-balance-info">
-                <img src="/imgs/icons/pig.png" alt="token-icon" className="token-icon" />
+                <img src="/imgs/icons/big-pig.png" alt="token-icon" className="token-icon" />
                 <span className="text">
                   <h4 className="earning">{tokenBalance.toFixed(0)}</h4>{" "}
                   <h4 className="total">/ {(currentPigInfo?.token_limit ?? 0)} PIG</h4>
