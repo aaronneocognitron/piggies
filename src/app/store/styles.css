@@ -59,9 +59,12 @@
 }
 .store-container .balance-container .ton-icon, .store-container .balance-container .token-icon {
   width: clamp(2rem, 4vh, 42px);
+  border-radius: 9999px;
 }
 .store-container .balance-container .text {
   font-size: clamp(1rem, 2.25vh, 26px);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 .store-container .balance-container .text h4 {
   display: inline;

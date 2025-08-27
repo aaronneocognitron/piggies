@@ -14,9 +14,9 @@ WHERE accrual_start IS NULL;
 
 -- Backfill values per level
 UPDATE public.pig_levels SET tokens_per_day = 3312, token_limit = 100000 WHERE level = 1;
-UPDATE public.pig_levels SET tokens_per_day = 6624, token_limit = 200000 WHERE level = 2;
-UPDATE public.pig_levels SET tokens_per_day = 16560, token_limit = 500000 WHERE level = 3;
-UPDATE public.pig_levels SET tokens_per_day = 33120, token_limit = 1000000 WHERE level = 4;
+UPDATE public.pig_levels SET tokens_per_day = 16560, token_limit = 500000 WHERE level = 2;
+UPDATE public.pig_levels SET tokens_per_day = 165600, token_limit = 5000000 WHERE level = 3;
+UPDATE public.pig_levels SET tokens_per_day = 1656000, token_limit = 50000000 WHERE level = 4;
 
 -- Ensure accrual_start auto-fills from created_at on insert
 CREATE OR REPLACE FUNCTION public.set_users_accrual_start_default()
