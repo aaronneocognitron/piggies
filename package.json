@@ -48,6 +48,7 @@
     "normalize.css": "^8.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-toastify": "^11.0.5",
     "swagger-ui-react": "5.12.0",
     "tonweb": "^0.0.66",
     "tree-sitter": "^0.21.1",

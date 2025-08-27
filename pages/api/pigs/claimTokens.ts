@@ -10,6 +10,9 @@ import { JettonWallet } from "@/../wrappers/JettonWallet";
 import { Address, beginCell, toNano } from "@ton/core";
 import { keyPairFromEnv } from "../../../scripts/helpers";
 
+const minMinutesToWait = 10;
+const requiredUpgradedPigs = 3;
+
 const pigsMap = pigsMapV2(undefined);
 
 export default async function handler(
@@ -48,8 +51,8 @@ export default async function handler(
     return res.status(400).json({ success: false, message: "User does not have pig" });
   }
 
-  if (Date.now() - +new Date(user.accrual_start) <= 10 * 60 * 1000) {
-    return res.status(429).json({ success: false, message: "Too many claims: please wait 10 minutes" });
+  if (Date.now() - +new Date(user.accrual_start) <= minMinutesToWait * 60 * 1000) {
+    return res.status(429).json({ success: false, errorCode: "tooManyClaimsTimeout", minutes: minMinutesToWait, message: `Too many claims: please wait ${minMinutesToWait} minutes` });
   }
 
   const currentPig = pigsMap.find(pig => pig.code === user.current_pig);
@@ -70,7 +73,7 @@ export default async function handler(
     .reduce((s, r) => s + r.users_count, 0);
 
   if (firstLevelDepthPigsCount < 3) {
-    return res.status(400).json({ success: false, message: "Level 1 must be filled to claim tokens" });
+    return res.status(400).json({ success: false, errorCode: "level1MustBeFilled", message: "Level 1 must be filled to claim tokens" });
   }
 
   if (user.current_pig > 1) {
@@ -78,8 +81,8 @@ export default async function handler(
       .filter(r => r.current_pig >= user.current_pig)
       .reduce((s, r) => s + r.users_count, 0);
 
-    if (referralsOfRequiredLevel < 3) {
-      return res.status(400).json({ success: false, message: `At least 3 ${currentPig.className} (or higher) PIGs must be in your ${maxDepth}-level tree` });
+    if (referralsOfRequiredLevel < requiredUpgradedPigs) {
+      return res.status(400).json({ success: false, errorCode: "upgradedPigsRequirement", amount: requiredUpgradedPigs, type: currentPig.className.charAt(0).toUpperCase() + currentPig.className.slice(1), treeDepth: maxDepth, message: `At least ${requiredUpgradedPigs} ${currentPig.className} (or higher) PIGs must be in your ${maxDepth}-level tree` });
     }
   }
 
@@ -90,7 +93,7 @@ export default async function handler(
       });
 
     if (+tokens <= 1) {
-      return res.status(400).json({ success: false, message: "Not enough tokens to claim" });
+      return res.status(400).json({ success: false, errorCode: "notEnoughTokensToClaim", message: "Not enough tokens to claim" });
     }
 
     const tc = getTonCenterClient();
@@ -126,10 +129,10 @@ export default async function handler(
         tokens: tokens || 0,
     });
   } catch (error) {
-    console.error("Error handling pig purchase:", error);
+    console.error("Error handling tokens claiming:", error);
     return res.status(500).json({
       success: false,
-      message: `Failed to update pig value, message ${error}`,
+      message: `Failed to claim tokens, message ${error}`,
     });
   }
 }

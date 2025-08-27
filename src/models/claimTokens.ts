@@ -8,5 +8,7 @@ export type ClaimTokensResponse = {
   tokens: number;
 } | {
   success: false;
+  errorCode?: string;
+  [params: string]: any;
   message: string;
 };

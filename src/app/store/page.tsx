@@ -26,6 +26,7 @@ import { ContractAddresses } from "../../../scripts/constants";
 import { useWallet } from "@/app/context/WalletProvider";
 import { useAccount } from "@/app/context/AccountProvider";
 import { ClaimTokensResponse } from "@/models/claimTokens";
+import { toast } from "react-toastify";
 
 type PigData = {
   pig_level: number;
@@ -74,7 +75,7 @@ export default function StorePage() {
 
       console.log("Transaction sent");
 
-      alert("✅ UpgradePig transaction sent successfully!");
+      toast.info(t("storePage.transactionSentSuccessfully"));
 
       console.log("Waiting for transaction to be confirmed...");
 
@@ -85,8 +86,8 @@ export default function StorePage() {
         telegram_id: userTelegramId,
       });
 
-      alert(
-          typeof response.data.message === 'string' ? response.data : 'upgraded_pig_level' in response.data.message ?
+      toast.success(
+          typeof response.data.message === 'string' ? response.data.message : 'upgraded_pig_level' in response.data.message ?
           t('storePage.purchaseCongratulations', { pig: pigsMap.find(pig => pig.code === response.data.message.upgraded_pig_level)?.title ?? 'PIG' }) :
               t('storePage.purchaseCongratulations', { pig: pigsMap.find(pig => pig.code === ((currentPigCode ?? 0) + 1))?.title ?? 'PIG' })
       );
@@ -94,7 +95,7 @@ export default function StorePage() {
     } catch (error) {
       console.error("Transaction failed or was rejected:", error);
       logger.error("Transaction failed or was rejected:", error);
-      alert(`⚠️ Transaction was cancelled or failed. ${error}`);
+      toast.error(t("storePage.transactionWasCancelledOrFailed"));
     }
     await fetchPigsData();
 
@@ -137,8 +138,8 @@ export default function StorePage() {
 
       console.log("withdraw Request sent");
 
-      alert(
-        `✅ Withdraw request for ${params.balance.toString()} has been sent.`
+      toast.success(
+          t("storePage.withdrawRequestSent", { amount: fromNano(params.balance.toString()) })
       );
 
       console.log("Waiting for transaction to be confirmed...");
@@ -149,7 +150,7 @@ export default function StorePage() {
     } catch (error) {
       console.error("Transaction failed or was rejected:", error);
       logger.error("Transaction failed or was rejected:", error);
-      alert(`⚠️ Transaction was cancelled or failed. ${error}`);
+      toast.error(t("storePage.transactionWasCancelledOrFailed"));
     }
     await fetchPigsData();
     await refetchUserData();
@@ -167,13 +168,16 @@ export default function StorePage() {
 
           if(!response.data.success) throw new Error(response.data.message);
 
-          alert(`You successfully claimed ${response.data.tokens} PIG`);
+          toast.success(t("storePage.claimRequestSent", { amount: response.data.tokens }));
 
           await fetchPigsData();
           await refetchUserData();
       } catch (e) {
           if(isAxiosError(e)) {
-              alert(e.response?.data?.message ?? e.message);
+              toast.error(e.response?.data?.errorCode ?
+                  t(`errors.${e.response?.data?.errorCode}`, e.response?.data) :
+                  (e.response?.data?.message ?? e.message)
+              );
           } else {
               console.error(e);
           }

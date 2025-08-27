@@ -45,7 +45,11 @@
       "cancel": "Отмена",
       "toUnlock": "чтобы разблокировать",
       "locked": "Заблокировано",
-      "loading": "Загружается"
+      "loading": "Загружается",
+      "transactionSentSuccessfully": "Транзакция успешно отправлена!",
+      "transactionWasCancelledOrFailed": "Транзакция была отменена или не удалась!",
+      "withdrawRequestSent": "Запрос на вывод {amount} TON был отправлен",
+      "claimRequestSent": "Запрос на получение {amount} PIG был отправлен"
     },
     "friendsPage": {
       "title": "Пригласите друзей!",
@@ -84,6 +88,12 @@
       "loading": "Загружается...",
       "user": "Юзер",
       "admin": "Админ"
+    },
+    "errors": {
+      "tooManyClaimsTimeout": "Слишком много запросов: пожалуйста, подождите {minutes} минут",
+      "level1MustBeFilled": "Уровень 1 должен быть заполнен для получения токенов",
+      "upgradedPigsRequirement": "В вашем {treeDepth}-уровневом дереве должно быть не менее {amount} {type} PIG (или выше) для получения токенов",
+      "notEnoughTokensToClaim": "Недостаточно токенов для вывода"
     },
     "balance": "Баланс",
     "earnings": "Доходы",

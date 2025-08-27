@@ -45,7 +45,11 @@
       "cancel": "Cancel",
       "toUnlock": "to unlock",
       "locked": "Locked",
-      "loading": "Loading"
+      "loading": "Loading",
+      "transactionSentSuccessfully": "Transaction sent successfully!",
+      "transactionWasCancelledOrFailed": "Transaction was cancelled or failed!",
+      "withdrawRequestSent": "Withdraw request for {amount} TON has been sent",
+      "claimRequestSent": "Claim request for {amount} PIG has been sent"
     },
     "friendsPage": {
       "title": "Invite Friends!",
@@ -84,6 +88,12 @@
       "loading": "Loading...",
       "user": "User",
       "admin": "Admin"
+    },
+    "errors": {
+      "tooManyClaimsTimeout": "Too many claims: please wait {minutes} minutes",
+      "level1MustBeFilled": "Level 1 must be filled to claim tokens",
+      "upgradedPigsRequirement": "At least {amount} {type} PIGs (or higher) must be in your {treeDepth}-level tree to claim tokens",
+      "notEnoughTokensToClaim": "Not enough tokens to claim"
     },
     "balance": "Balance",
     "earnings": "Earnings",

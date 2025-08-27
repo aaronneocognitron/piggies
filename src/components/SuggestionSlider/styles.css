@@ -44,7 +44,6 @@
 }
 .suggestion-slider-container .slider-wrapper {
   overflow: hidden;
-  border-radius: 8px;
 }
 .suggestion-slider-container .slider-track {
   display: flex;

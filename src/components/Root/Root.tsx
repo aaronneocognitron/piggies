@@ -18,6 +18,7 @@ import { useDidMount } from "@/hooks/useDidMount";
 import { useClientOnce } from "@/hooks/useClientOnce";
 import { setLocale } from "@/core/i18n/locale";
 import { init } from "@/core/init";
+import { Slide, ToastContainer } from "react-toastify";
 
 import "./styles.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -62,6 +63,7 @@ function RootInner({ children }: PropsWithChildren) {
           <AccountContextProvider>
             <WalletGuard>
               {children}
+              <ToastContainer position="top-center" transition={Slide} theme="colored" />
             </WalletGuard>
           </AccountContextProvider>
         </WalletContextProvider>
