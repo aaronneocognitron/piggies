@@ -55,18 +55,26 @@
 .admin-container .user-info-container .balance-container .withdraw-btn:enabled {
   background-color: #ebb319;
 }
-.admin-container .user-info-container .balance-container .balance-info {
+.admin-container .user-info-container .balance-container .balance-info, .admin-container .user-info-container .balance-container .token-balance-info {
   padding: 0 15px;
   display: flex;
   align-items: center;
   gap: clamp(0.5rem, 1vh, 10px);
 }
-.admin-container .user-info-container .balance-container .pig-image {
+.admin-container .user-info-container .balance-container .token-balance-info {
+  margin-top: clamp(0.5rem, 1vh, 10px);
+}
+.admin-container .user-info-container .balance-container .pig-image, .admin-container .user-info-container .balance-container .token-image {
   width: clamp(2rem, 4vh, 42px);
   height: auto;
 }
+.admin-container .user-info-container .balance-container .token-image {
+  border-radius: 9999px;
+}
 .admin-container .user-info-container .balance-container .text {
   font-size: clamp(1rem, 2.25vh, 26px);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 .admin-container .user-info-container .balance-container .text h4 {
   display: inline;

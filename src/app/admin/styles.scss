@@ -55,18 +55,26 @@
           background-color: #ebb319;
         }
       }
-      .balance-info {
+      .balance-info, .token-balance-info {
         padding: 0 15px;
         display: flex;
         align-items: center;
         gap: clamp(0.5rem, 1vh, 10px);
       }
-      .pig-image {
+      .token-balance-info {
+        margin-top: clamp(0.5rem, 1vh, 10px);
+      }
+      .pig-image, .token-image {
         width: clamp(2rem, 4vh, 42px);
         height: auto;
       }
+      .token-image {
+        border-radius: 9999px;
+      }
       .text {
         font-size: clamp(1rem, 2.25vh, 26px);
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "tnum";
         h4 {
           display: inline;
         }

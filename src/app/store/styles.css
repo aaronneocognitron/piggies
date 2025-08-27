@@ -59,6 +59,8 @@
 }
 .store-container .balance-container .ton-icon, .store-container .balance-container .token-icon {
   width: clamp(2rem, 4vh, 42px);
+}
+.store-container .balance-container .token-icon {
   border-radius: 9999px;
 }
 .store-container .balance-container .text {

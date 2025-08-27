@@ -20,6 +20,7 @@ export default function ProfilePage() {
   const [histories, setHistories] = useState<Reward[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [tokenBalance, setTokenBalance] = useState(0);
 
   const rawWalletAddress = useMemo(() => {
       try {
@@ -40,6 +41,7 @@ export default function ProfilePage() {
       ]);
 
       setUser(userResponse?.data || null);
+      setTokenBalance(userResponse?.data?.token_balance ?? 0);
 
       const historiesToSet = historyResponse?.data.message || [];
       setHistories(historiesToSet);
@@ -58,12 +60,30 @@ export default function ProfilePage() {
       return pigsMap.find((item) => item.code === code);
   };
 
+    const currentPigInfo = pigsInfo?.find(pig => pig.level === (user?.current_pig ?? 0));
+
     useEffect(() => {
         axios.get(`/api/pigs/info`).then(
             response => setPigsInfo(prevData => response?.data?.pigs ?? prevData),
             (err) => console.error(err),
         );
     }, []);
+
+    useEffect(() => {
+        if (!user) return;
+        const updateTokenBalance = () => {
+            setTokenBalance(Math.min(
+                currentPigInfo?.token_limit ?? 0,
+                (user?.token_balance ?? 0) + (Date.now() - +new Date(user?.accrual_start ?? Date.now())) * (currentPigInfo?.tokens_per_day ?? 0) / (24*60*60*1000)
+            ));
+        };
+
+        if (!tokenBalance) updateTokenBalance();
+
+        const timeout = setTimeout(updateTokenBalance, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [tokenBalance, currentPigInfo, user]);
 
   return (
       <div className="admin-container">
@@ -107,6 +127,22 @@ export default function ProfilePage() {
                           <strong className="text">
                               {user?.fullname ?? 'Username'}
                           </strong>
+                      </div>
+                      <div className="token-balance-info">
+                          <Image
+                              width={64}
+                              height={64}
+                              src={'/imgs/icons/big-pig.png'}
+                              alt={"Pig token"}
+                              className="token-image"
+                              draggable={false}
+                          />
+                          <span className="text">
+                              <h4 className="earning">{tokenBalance.toFixed(0)}</h4>{" "}
+                              {!!user?.user_type && (
+                                  <h4 className="total">/ {(currentPigInfo?.token_limit ?? 0)} PIG</h4>
+                              )}
+                          </span>
                           {!!user && !user.user_type && (
                               <span className="text">
                               ({t('adminPage.admin')})

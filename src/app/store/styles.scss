@@ -58,6 +58,8 @@
     }
     .ton-icon, .token-icon {
       width: clamp(2rem, 4vh, 42px);
+    }
+    .token-icon {
       border-radius: 9999px;
     }
     .text {
