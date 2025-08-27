@@ -2,13 +2,16 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-top: 10px;
+  gap: 4px;
   max-width: 100%;
   user-select: none;
   overflow: hidden;
   text-align: center;
 }
 .pig-card .title {
-  flex: 0.25;
+  margin: 0;
+  flex: 0.125;
   align-content: center;
   max-height: 72px;
 }
@@ -18,7 +21,7 @@
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  flex: 0.25;
+  flex: 0.125;
   align-content: center;
   max-height: 72px;
 }
@@ -32,7 +35,7 @@
 }
 .pig-card .caption {
   margin: 0;
-  flex: 0.25;
+  flex: 0.125;
   align-content: center;
   max-height: 60px;
 }
