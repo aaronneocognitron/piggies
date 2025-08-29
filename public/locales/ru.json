@@ -49,7 +49,7 @@
       "transactionSentSuccessfully": "Транзакция успешно отправлена!",
       "transactionWasCancelledOrFailed": "Транзакция была отменена или не удалась!",
       "withdrawRequestSent": "Запрос на вывод {amount} TON был отправлен",
-      "claimRequestSent": "Запрос на получение {amount} PIG был отправлен"
+      "tokenClaimCongratulations": "Поздравляем, вы получили {amount} BIGPIG"
     },
     "friendsPage": {
       "title": "Пригласите друзей!",

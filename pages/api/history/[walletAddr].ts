@@ -147,7 +147,8 @@ export default async function handler(
 
     const [
         { data: userTxs, error: txError },
-        { data: userRewards, error: RewardsError }
+        { data: userRewards, error: RewardsError },
+        { data: userTokenWithdraws, error: withdrawsError },
     ] = await Promise.all([
         supabase
             .from("tx_history")
@@ -156,16 +157,16 @@ export default async function handler(
         supabase
             .from("rewards_history")
             .select("wallet_address, reward, referral, related_tx, created_at, reward_type")
-            .eq("wallet_address", wallet_address.wallet_address)
+            .eq("wallet_address", wallet_address.wallet_address),
+        supabase
+            .from("token_withdrawal_history")
+            .select("wallet_address, amount, related_tx, created_at")
+            .eq("wallet_address", wallet_address.wallet_address),
     ]);
 
-    if (txError) {
-      throw new Error(txError.message);
-    }
-
-    if (RewardsError) {
-      throw new Error(RewardsError.message);
-    }
+    if (txError) throw new Error(txError.message);
+    if (RewardsError) throw new Error(RewardsError.message);
+    if (withdrawsError) throw new Error(withdrawsError.message);
 
     const histories: UserHistory[] = [];
 
@@ -175,6 +176,10 @@ export default async function handler(
 
     for (const reward of userRewards) {
       histories.push(await prepareUserHistoryObj(reward));
+    }
+
+    for (const withdraw of userTokenWithdraws) {
+      histories.push(await prepareUserHistoryObj(withdraw));
     }
 
     histories.sort(

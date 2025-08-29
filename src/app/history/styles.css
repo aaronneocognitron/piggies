@@ -68,6 +68,10 @@
 .history-container .history-item .details .footer h2 .balance.withdraw {
   color: #c42c8f;
 }
+.history-container .history-item .details .footer h2 .balance.token {
+  color: #ffbe0b;
+}
 .history-container .history-item .cover img {
   width: 68px;
+  border-radius: 9999px;
 }

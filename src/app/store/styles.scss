@@ -27,6 +27,12 @@
     font-size: clamp(1rem, 2.5vh, 32px);
   }
 
+  @keyframes loadingFade {
+    0%   { opacity: 0.6; }
+    50%  { opacity: 0.3; }
+    100% { opacity: 0.6; }
+  }
+
   .balance-container {
     text-align: center;
 
@@ -36,6 +42,12 @@
       height: auto;
       color: #691d82;
       border-radius: 34px;
+      transition: opacity 0.3s ease;
+      &.loading {
+        pointer-events: none;
+        opacity: 0.6;
+        animation: loadingFade 3s infinite ease-in-out;
+      }
       & > * {
         text-wrap: auto;
       }

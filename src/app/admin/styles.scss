@@ -177,12 +177,17 @@
                 &.withdraw {
                   color: #c42c8f;
                 }
+
+                &.token {
+                  color: #ffbe0b;
+                }
               }
             }
           }
         }
         .cover img {
           width: 68px;
+          border-radius: 9999px;
         }
       }
     }

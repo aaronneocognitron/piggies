@@ -14,6 +14,13 @@ import {
   OpenedContract,
 } from "@ton/core";
 import {
+    JettonWallet,
+    JettonTransfer,
+    loadJettonTransfer,
+    JettonTransferInternal,
+    loadJettonTransferInternal
+} from "../../../build/JettonWallet/tact_JettonWallet";
+import {
   loadPigApproval,
   loadPigApprovalEvent,
   loadPigCreationEvent,
@@ -33,18 +40,18 @@ import { getTonApiClient, getTonCenterClient } from "../tonClients";
 import { get } from "http";
 import { sendPigApproval } from "../../../scripts/pigApproval";
 import {
-  attachUserToTree,
-  getGenesisUser, getPigPrice,
-  getPigs, getUsersByPigAddresses,
-  initTxHistory,
-  isDuplicatePurchase,
-  updateBountyHuntersBalances,
-  updateReferralsRewardsHistory,
-  updateTxHistory,
-  UpdateUSerInTree,
-  updateUserPiggyBankBalance,
-  upgradeUserPig,
-  upgradeUserPigAddress,
+    attachUserToTree,
+    getGenesisUser, getPigPrice,
+    getPigs, getUsersByPigAddresses,
+    initTxHistory, insertTokenWithdrawalTransaction,
+    isDuplicatePurchase,
+    updateBountyHuntersBalances,
+    updateReferralsRewardsHistory,
+    updateTxHistory,
+    UpdateUSerInTree,
+    updateUserPiggyBankBalance,
+    upgradeUserPig,
+    upgradeUserPigAddress,
 } from "./dbOps";
 import { PigLevel } from "../../models/pigs";
 import { WithdrawFromNftPig } from "../../../wrappers/Pig";
@@ -61,9 +68,9 @@ async function catchPigShopEvents(
   tonAPiClient: TonApiClient,
   after_lt?: bigint
 ) {
-  console.log("➡️ Starting to catch PigShop events");
-  console.log("🔍 Listen address:", ContractAddresses.pigShop.toString());
-  console.log("📌 Last known lt:", after_lt?.toString());
+  // console.log("➡️ Starting to catch PigShop events");
+  // console.log("🔍 Listen address:", ContractAddresses.pigShop.toString());
+  // console.log("📌 Last known lt:", after_lt?.toString());
 
   const txs = await tonAPiClient.blockchain.getBlockchainAccountTransactions(
     ContractAddresses.pigShop,
@@ -74,10 +81,10 @@ async function catchPigShopEvents(
   );
 
   if (txs && txs.transactions.length === 0) {
-    console.log("⚠️ No new transactions found");
+    // console.log("⚠️ No new transactions found");
     return after_lt;
   }
-  console.log("📦 Transactions fetched:", txs.transactions.length);
+  console.log("📦 PigShop transactions fetched:", txs.transactions.length);
 
   let events: Array<
     | extendedPigUpgradeEvent
@@ -346,15 +353,150 @@ async function catchPigShopEvents(
   }
 
   const nextLt = txs.transactions[txs.transactions.length - 1].lt;
-  console.log("⏭️ Returning next lt:", nextLt.toString());
+  // console.log("⏭️ Returning next lt:", nextLt.toString());
 
   return nextLt;
 }
 
-export async function listenPigShopForever() {
-  console.log("🔁 Starting to listen for PigShop events");
+async function catchPigTokenWalletEvents(
+  adminWallet: OpenedContract<WalletContractV5R1>,
+  PigTokenWalletContract: OpenedContract<JettonWallet>,
+  tonCenterClient: TonClient,
+  tonAPiClient: TonApiClient,
+  after_lt?: bigint
+) {
+  // console.log("➡️ Starting to catch JettonWallet events");
+  // console.log("🔍 Listen address:", ContractAddresses.pigTokenWallet.toString());
+  // console.log("📌 Last known lt:", after_lt?.toString());
+
+  const txs = await tonAPiClient.blockchain.getBlockchainAccountTransactions(
+    ContractAddresses.pigTokenWallet,
+    {
+      limit: after_lt ? 10 : 1,
+      after_lt,
+    }
+  );
+
+  if (txs && txs.transactions.length === 0) {
+    // console.log("⚠️ No new transactions found");
+    return after_lt;
+  }
+  console.log("📦 PigTokenWallet transactions fetched:", txs.transactions.length);
+
+  type ExtendedEvent<T> = T & {
+      tx_hash: string;
+      utime: number;
+  };
+
+  let eventsArr: Array<
+    | ExtendedEvent<JettonTransfer>
+    | ExtendedEvent<JettonTransferInternal>
+    | undefined
+  >[] = [];
+
+  for (const tx of txs.transactions) {
+    console.log("🔁 Processing transaction:", tx.hash);
+
+    if (!tx.computePhase?.success || !tx.actionPhase?.success || tx.aborted) {
+      console.log("🚫 Skipped aborted or failed tx:", tx.hash);
+      continue;
+    }
+
+    if (tx.inMsg?.rawBody === undefined) {
+      console.log("⚠️ Skipped tx with no body:", tx.hash);
+      continue;
+    }
+
+    const events = [] as typeof eventsArr[number];
+
+    for (const msg of [tx.inMsg, ...tx.outMsgs]) {
+      if (!msg) return;
+      console.log(
+        "💬 Message:",
+        Object.entries({ ...JettonWallet.opcodes }).find(
+          ([key, value]) => BigInt(value) === msg.opCode
+        )?.[0]
+      );
+
+      try {
+        if (
+          msg.msgType === "int_msg" &&
+          !msg.bounced &&
+          msg.opCode === BigInt(JettonWallet.opcodes.JettonTransfer) &&
+          msg.rawBody
+        ) {
+          events.push({
+            ...loadJettonTransfer(msg.rawBody?.asSlice()),
+            tx_hash: tx.hash,
+            utime: tx.utime,
+          });
+          console.log("✅ Detected JettonTransfer event");
+        } else if (
+            msg.msgType === "int_msg" &&
+            msg.opCode === BigInt(JettonWallet.opcodes.JettonTransferInternal) &&
+            msg.rawBody
+        ) {
+            events.push({
+              ...loadJettonTransferInternal(msg.rawBody?.asSlice()),
+              tx_hash: tx.hash,
+              utime: tx.utime,
+            });
+            console.log("✅ Detected JettonTransferInternal event");
+        }
+      } catch (e) {
+        console.log("❌ Error decoding message:", msg.decodedOpName, e);
+        continue;
+      }
+    }
+    eventsArr.push(events);
+  }
+  console.log("the parsed transactions events are", eventsArr);
+  if (!after_lt) {
+    const nextLt = txs.transactions[txs.transactions.length - 1].lt;
+    console.log(
+      "⏭️Not processing the old transaction and Returning next lt:",
+      nextLt.toString()
+    );
+
+    return nextLt;
+  }
+
+  for (const events of eventsArr) {
+    let user: Awaited<ReturnType<typeof getUser>> | undefined;
+    for (const event of events) {
+      if (event) {
+        if (event.$$type === "JettonTransfer") {
+          console.log("🪙️ Handling JettonTransfer event");
+            const userAddr = event.destination.toRawString();
+            user = await getUser(userAddr);
+            console.log("User:", user);
+        } else if (event.$$type === "JettonTransferInternal") {
+          console.log("📥 Handling JettonTransferInternal event");
+
+          if (user) {
+            await insertTokenWithdrawalTransaction(user.wallet_address, event.amount, event.tx_hash, event.queryId, event.utime ? new Date(event.utime * 1000) : undefined);
+            console.log("🪙️ BIGPIG token transfer transaction added");
+          } else {
+            console.error("JettonTransferInternal: unknown user, event:", event);
+          }
+        }
+      } else {
+        console.log("⚠️ No event was detected");
+      }
+    }
+  }
+
+  const nextLt = txs.transactions[txs.transactions.length - 1].lt;
+  // console.log("⏭️ Returning next lt:", nextLt.toString());
+
+  return nextLt;
+}
+
+export async function listenContractsForever() {
+  console.log("🔁 Starting to listen for contract events");
   try {
-    let lastLt;
+    let pigShopLastLt: bigint | undefined;
+    let pigTokenWalletLastLt: bigint | undefined;
 
     const tc = getTonCenterClient();
     const tac = getTonApiClient();
@@ -362,32 +504,44 @@ export async function listenPigShopForever() {
 
     console.log("👛 Admin wallet loaded:", adminWallet.address.toString());
 
+    const pigTokenWallet = tc.open(JettonWallet.fromAddress(ContractAddresses.pigTokenWallet));
     const pigShop = tc.open(PigShop.fromAddress(ContractAddresses.pigShop));
     const pigCollection = tc.open(PigCollection.fromAddress(ContractAddresses.pigsCollection));
 
+    console.log("🪙 JettonWallet contract opened at:", pigTokenWallet.address.toString());
     console.log("🏪 PigShop contract opened at:", pigShop.address.toString());
+    console.log("🐷 PigCollection contract opened at:", pigCollection.address.toString());
 
     while (true) {
       try {
-        lastLt = await catchPigShopEvents(
-          adminWallet,
-          pigShop,
-          pigCollection,
-          tc,
-          tac,
-          lastLt
-        );
+        [pigShopLastLt, pigTokenWalletLastLt] = await Promise.all([
+          catchPigShopEvents(
+            adminWallet,
+            pigShop,
+            pigCollection,
+            tc,
+            tac,
+            pigShopLastLt
+          ),
+          catchPigTokenWalletEvents(
+            adminWallet,
+            pigTokenWallet,
+            tc,
+            tac,
+            pigTokenWalletLastLt
+          )
+        ]);
 
-        // waiting for 1 second before checking the next lt
+        // waiting for 2 seconds before checking the next lt
         await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (error) {
-        console.error("Error in listenPigShopForever:", error);
+        console.error("Error in listenContractsForever:", error);
         console.log("restarting...");
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     }
   } catch (error) {
-    console.error("Error in listenPigShopForever:", error);
+    console.error("Error in listenContractsForever:", error);
     console.log("restarting...");
   }
 }

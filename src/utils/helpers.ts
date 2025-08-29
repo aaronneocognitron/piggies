@@ -1,7 +1,7 @@
 import { supabase } from "./supabase";
 import { error } from "console";
 import { PigLevel } from "@/models/pigs";
-import { BitString, Dictionary, DictionaryKeyTypes } from "@ton/core";
+import { BitString, Dictionary, DictionaryKeyTypes, toNano } from "@ton/core";
 
 export async function getUser(wallet_address: string) {
   const { data, error: fetchError } = await supabase
@@ -51,6 +51,13 @@ export async function prepareUserHistoryObj(tx: any): Promise<any> {
       self_balance_change: tx.reward,
       reward_type: tx.reward_type,
       //referral_depth: 0, //TODO: check referral or bounty hunter
+    };
+  } if (tx.amount) {
+    const user = await getUser(tx.wallet_address);
+    return {
+      created_at: tx.created_at,
+      fullname: user.fullname,
+      self_balance_change: toNano(tx.amount).toString(),
     };
   } else {
     return {

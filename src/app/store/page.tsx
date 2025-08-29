@@ -45,6 +45,8 @@ export default function StorePage() {
   //const [tonPrice, setTonPrice] = useState(0);
   const [isPurchaseInProgress, setIsPurchaseInProgress] = useState(false);
   const [tokenBalance, setTokenBalance] = useState(0);
+  const [isWithdrawingTon, setIsWithdrawingTon] = useState(false);
+  const [isWithdrawingToken, setIsWithdrawingToken] = useState(false);
 
   const userTelegramId = useMemo(() => initDataState?.user?.id, [initDataState]);
 
@@ -107,6 +109,7 @@ export default function StorePage() {
     if (!walletAddress || !tonClient || isPurchaseInProgress) return;
 
     try {
+      setIsWithdrawingTon(true);
       const response = (
         await axios.get(
           `/api/pigs/withdrawParams?wallet_address=${walletAddress}`
@@ -146,21 +149,22 @@ export default function StorePage() {
 
       setIsPurchaseInProgress(true);
 
+      await Promise.all([fetchPigsData(), refetchUserData()]);
       // show the rest to the user
     } catch (error) {
       console.error("Transaction failed or was rejected:", error);
       logger.error("Transaction failed or was rejected:", error);
       toast.error(t("storePage.transactionWasCancelledOrFailed"));
+    } finally {
+        setIsWithdrawingTon(false);
+        setIsPurchaseInProgress(false);
+        setIsConfirmModalOpen(false);
     }
-    await fetchPigsData();
-    await refetchUserData();
-
-    setIsPurchaseInProgress(false);
-    setIsConfirmModalOpen(false);
   };
 
   const handleTokenWithdrawal = async () => {
       try {
+          setIsWithdrawingToken(true);
           const response = await axios.post<ClaimTokensResponse>(`/api/pigs/claimTokens`, {
               wallet_address: walletAddress,
               telegram_id: userTelegramId,
@@ -168,10 +172,10 @@ export default function StorePage() {
 
           if(!response.data.success) throw new Error(response.data.message);
 
-          toast.success(t("storePage.claimRequestSent", { amount: response.data.tokens }));
+          toast.success(t("storePage.tokenClaimCongratulations", { amount: response.data.tokens }));
+          setTokenBalance(oldBalance => Math.max(0, oldBalance - response.data.tokens));
 
-          await fetchPigsData();
-          await refetchUserData();
+          await Promise.all([fetchPigsData(), refetchUserData()]);
       } catch (e) {
           if(isAxiosError(e)) {
               toast.error(e.response?.data?.errorCode ?
@@ -181,6 +185,8 @@ export default function StorePage() {
           } else {
               console.error(e);
           }
+      } finally {
+          setIsWithdrawingToken(false);
       }
   };
 
@@ -434,6 +440,7 @@ export default function StorePage() {
   const fullnessPercent = Number.EPSILON + (+fromNano(user?.piggy_bank_balance ?? 0) / (+fromNano(currentPigInfo?.balance_limit ?? 0) || Number.POSITIVE_INFINITY) || 0);
 
   useEffect(() => {
+      if (!user || !currentPigInfo || isWithdrawingToken) return;
       const updateTokenBalance = () => {
           setTokenBalance(Math.min(
               currentPigInfo?.token_limit ?? 0,
@@ -446,7 +453,7 @@ export default function StorePage() {
       const timeout = setTimeout(updateTokenBalance, 1000);
 
       return () => clearTimeout(timeout);
-  }, [tokenBalance, currentPigInfo, user]);
+  }, [tokenBalance, currentPigInfo, user, isWithdrawingToken]);
 
   return (
     <>
@@ -520,7 +527,7 @@ export default function StorePage() {
                   <h4 className="total">/ {fromNano(currentPigInfo?.balance_limit ?? 0)} TON</h4>
                 </span>
                 <Button
-                    className="withdraw-btn"
+                    className={`withdraw-btn ${isWithdrawingTon ? 'loading' : ''}`}
                     disabled={fullnessPercent <= Number.EPSILON}
                     onClick={handleWithdrawal}
                 >
@@ -531,10 +538,10 @@ export default function StorePage() {
                 <img src="/imgs/icons/big-pig.png" alt="token-icon" className="token-icon" />
                 <span className="text">
                   <h4 className="earning">{tokenBalance.toFixed(0)}</h4>{" "}
-                  <h4 className="total">/ {(currentPigInfo?.token_limit ?? 0)} PIG</h4>
+                  <h4 className="total">/ {(currentPigInfo?.token_limit ?? 0)} BIGPIG</h4>
                 </span>
                 <Button
-                    className="withdraw-btn"
+                    className={`withdraw-btn ${isWithdrawingToken ? 'loading' : ''}`}
                     disabled={tokenBalance <= 1}
                     onClick={handleTokenWithdrawal}
                 >

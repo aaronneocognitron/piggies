@@ -49,7 +49,7 @@
       "transactionSentSuccessfully": "Transaction sent successfully!",
       "transactionWasCancelledOrFailed": "Transaction was cancelled or failed!",
       "withdrawRequestSent": "Withdraw request for {amount} TON has been sent",
-      "claimRequestSent": "Claim request for {amount} PIG has been sent"
+      "tokenClaimCongratulations": "Congratulations, you have received {amount} BIGPIG"
     },
     "friendsPage": {
       "title": "Invite Friends!",

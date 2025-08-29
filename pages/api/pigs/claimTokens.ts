@@ -9,6 +9,7 @@ import { ContractAddresses } from "../../../scripts/constants";
 import { JettonWallet } from "@/../wrappers/JettonWallet";
 import { Address, beginCell, toNano } from "@ton/core";
 import { keyPairFromEnv } from "../../../scripts/helpers";
+import { handleClaimTokens } from "@/utils/claimTokens/claimTokensHandler";
 
 const minMinutesToWait = 10;
 const requiredUpgradedPigs = 3;
@@ -102,12 +103,14 @@ export default async function handler(
 
     const pigTokenWallet = tc.open(JettonWallet.fromAddress(ContractAddresses.pigTokenWallet));
 
+    const queryId = (BigInt(user.id) << 32n) | BigInt(Math.floor(Date.now() / 1000));
+
     await pigTokenWallet.send(
       adminWallet.sender(secretKey),
       { value: toNano("0.05") },
         {
           $$type: "JettonTransfer",
-          queryId: BigInt(user.id),
+          queryId: queryId,
           amount: toNano(tokens),
           destination: Address.parse(user.wallet_address),
           responseDestination: adminWallet.address,
@@ -117,6 +120,8 @@ export default async function handler(
         }
     );
 
+    const result = await handleClaimTokens(user.wallet_address, queryId);
+
     const { error: updateError } = await supabase
         .from("users")
         .update({ token_balance: 0 })
@@ -124,10 +129,7 @@ export default async function handler(
 
     if (updateError) throw updateError;
 
-    return res.status(200).json({
-        success: true,
-        tokens: tokens || 0,
-    });
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error handling tokens claiming:", error);
     return res.status(500).json({

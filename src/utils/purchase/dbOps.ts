@@ -429,3 +429,31 @@ export async function updateUserPiggyBankBalance(
     );
   }
 }
+
+export async function insertTokenWithdrawalTransaction(
+    userAddress: string,
+    amount: bigint,
+    tx_hash: string,
+    query_id?: bigint,
+    datetime?: Date,
+) {
+    const {error: insertError} = await supabase
+        .from("token_withdrawal_history")
+        .insert({
+            wallet_address: userAddress,
+            amount: parseInt(fromNano(amount)),
+            related_tx: tx_hash,
+            query_id: Number(query_id || 0),
+            created_at: datetime,
+        })
+        .select()
+        .single();
+
+    if (insertError) {
+        console.error("Insert withdraw token transaction error:", insertError);
+    } else {
+        console.log(
+            `Inserted transaction of ${userAddress} to withdraw ${fromNano(amount)} BIGPIG`
+        );
+    }
+}

@@ -77,7 +77,7 @@ export default function HistoryPage() {
                     <div className="head">
                       <h2>
                         {history.fullname}{" "}
-                        {(!history.self_balance_change || history.self_balance_change < 0) && ( // TODO: fix level fetching
+                        {(!history.self_balance_change || history.self_balance_change < 0 || !history.upgraded_pig_level) && ( // TODO: fix level fetching
                           <span className="level">
                             (
                             {history.referral_depth
@@ -98,11 +98,11 @@ export default function HistoryPage() {
                         </span>{" "}
                         <span>{
                           history.self_balance_change >= 0 ?
-                            (history.reward_type ? `${history.reward_type} ${t("historiesPage.bonusForNFT")}` : t("historiesPage.got")) :
+                            (history.reward_type ? `${history.reward_type} ${t("historiesPage.bonusForNFT")}` : history.upgraded_pig_level ? t("historiesPage.got") : t("historiesPage.emptied")) :
                             t("historiesPage.emptied")
                         }</span>{" "}
                         <span className={`pig-title ${pigClassName}`}>
-                          {targetPig?.title}
+                          {targetPig?.title ?? 'BIGPIG'}
                         </span>
                       </h2>
                     </div>
@@ -111,8 +111,8 @@ export default function HistoryPage() {
                         {(history.self_balance_change && (
                           <>
                             {t("historiesPage.balance")}:{" "}
-                            <span className={`balance ${history.self_balance_change < 0 ? 'withdraw' : ''}`}>
-                              {history.self_balance_change > 0 && '+'}{fromNano(history.self_balance_change)} TON
+                            <span className={`balance ${history.self_balance_change < 0 ? 'withdraw' : !history.reward_type ? 'token' : ''}`}>
+                              {history.reward_type ? (history.self_balance_change > 0 && '+') : (history.self_balance_change > 0 && '-')}{fromNano(history.self_balance_change)} {history.reward_type ? 'TON' : 'BIGPIG'}
                             </span>
                           </>
                         )) || <></>}
@@ -120,7 +120,7 @@ export default function HistoryPage() {
                     </div>
                   </div>
                   <div className="cover">
-                    <img src={targetPig?.cover} alt="pig-cover" />
+                    <img src={targetPig?.cover ?? '/imgs/icons/big-pig.png'} alt="pig-cover" />
                   </div>
                 </div>
               );

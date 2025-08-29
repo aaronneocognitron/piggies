@@ -2,9 +2,9 @@
 
 import "./instrument";
 import * as Sentry from "@sentry/node";
-import { listenPigShopForever } from "../src/utils/purchase/listenNode";
+import { listenContractsForever } from "../src/utils/purchase/listenNode";
 
-console.log("🚀 Starting PigShop Event Listener with auto-restart");
+console.log("🚀 Starting Contracts Event Listener with auto-restart");
 
 // Handle graceful shutdown
 process.on('SIGINT', () => {
@@ -39,7 +39,7 @@ async function runListenerWithRestart() {
     try {
       console.log(`📡 Starting listener process (attempt ${restartCount + 1})`);
       
-      await listenPigShopForever();
+      await listenContractsForever();
       
       // If we get here, the listener has completed normally (shouldn't happen)
       console.log('✅ Listener completed normally');
