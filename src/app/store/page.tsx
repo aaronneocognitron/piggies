@@ -99,7 +99,7 @@ export default function StorePage() {
       logger.error("Transaction failed or was rejected:", error);
       toast.error(t("storePage.transactionWasCancelledOrFailed"));
     }
-    await fetchPigsData();
+    await Promise.all([fetchPigsData(), refetchUserData()]);
 
     setIsPurchaseInProgress(false);
     setIsConfirmModalOpen(false);
@@ -440,7 +440,7 @@ export default function StorePage() {
   const fullnessPercent = Number.EPSILON + (+fromNano(user?.piggy_bank_balance ?? 0) / (+fromNano(currentPigInfo?.balance_limit ?? 0) || Number.POSITIVE_INFINITY) || 0);
 
   useEffect(() => {
-      if (!user || !currentPigInfo || isWithdrawingToken) return;
+      if (!user || !currentPigInfo || isWithdrawingToken || isPurchaseInProgress) return;
       const updateTokenBalance = () => {
           setTokenBalance(Math.min(
               currentPigInfo?.token_limit ?? 0,
@@ -448,12 +448,12 @@ export default function StorePage() {
           ));
       };
 
-      if (!tokenBalance) updateTokenBalance();
+      updateTokenBalance();
 
-      const timeout = setTimeout(updateTokenBalance, 1000);
+      const interval = setInterval(updateTokenBalance, 1000);
 
-      return () => clearTimeout(timeout);
-  }, [tokenBalance, currentPigInfo, user, isWithdrawingToken]);
+      return () => clearInterval(interval);
+  }, [currentPigInfo, user, isWithdrawingToken, isPurchaseInProgress]);
 
   return (
     <>
