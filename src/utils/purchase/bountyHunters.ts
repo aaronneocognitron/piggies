@@ -49,8 +49,8 @@ export async function findUsersBountyHunters(
     const userIdsToFetch: string[] = [];
     const upperUsersLimit = {
       [1]: 3,
-      [2]: 7,
-      [3]: 10,
+      [2]: 12,
+      [3]: 12,
       [4]: 12,
     }[upgradedPigLevel];
 
@@ -91,8 +91,17 @@ export async function findUsersBountyHunters(
         throw new Error("Failed to fetch upper users: " + usersError?.message);
       }
 
-      for (const user of users) {
-        if (user.current_pig >= upgradedPigLevel) {
+      const lowerUsersLimits = {
+        [1]: 3,
+        [2]: 7,
+        [3]: 10,
+        [4]: 12,
+      };
+
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        const depthIndex = userIdsToFetch.indexOf(user.id);
+        if (user.current_pig >= upgradedPigLevel && depthIndex < (lowerUsersLimits[user.current_pig as keyof typeof lowerUsersLimits] ?? 0)) {
           const totalInvited = await calcTotalInvited(user.id);
           upperUsers.push({
             telegram_id: user.telegram_id,
